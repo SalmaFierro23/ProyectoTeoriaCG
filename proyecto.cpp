@@ -66,7 +66,10 @@ GLuint VBO, VAO, EBO;
 Camera camera(glm::vec3(-21.0f, 3.0f, -5.0f));//20.0f en z
 //Camera camera(glm::vec3(-38.0f, 7.0f, 12.0f));
 //Camera camera(glm::vec3(0.0f, 5.0f, 25.0f));
-
+/*************************************************************************************/
+bool crece = true;
+float movA = 0.05f;
+/*************************************************************************************/
 double	lastX = 0.0f,
 mul = 1.0f,
 lastY = 0.0f,
@@ -626,7 +629,16 @@ void myData()
 int mov_dron = 0;
 float velocidad = 0;
 void animate(void)
+
 {
+	if (crece) {
+		movA += 0.005;
+		if (movA > 1.0f) crece = false;
+	}
+	else {
+		movA -= 0.005;
+		if (movA < 0.2f) crece = true;
+	}
 //ANIMACION DRON
 	/*if (animacion) {
 		if (mov_dron == 0)
@@ -844,7 +856,7 @@ bool flag = false;
 
 void display(Shader shader, Shader text, Model cielo, Model ave, Model alaDer, Model alaIzq, Model PieDer, Model PieIzq,
 	Model casa, Model comedor,  Model alberca, Model sala, Model cocina, Model Salma, Model baño1, Model baño2, Model Javi, Model Mau, Model jardin,
-	Model cochera, Model carro1, Model dron, Model carro2, Model robot, Model BraDer, Model BraIzq)
+	Model cochera, Model carro1, Model dron, Model carro2, Model robot, Model BraDer, Model BraIzq,Model Rosa)
 	
 {
 
@@ -1024,6 +1036,28 @@ void display(Shader shader, Shader text, Model cielo, Model ave, Model alaDer, M
 	model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
 	shader.setMat4("model", model);
 	jardin.Draw(shader); // JARDIN
+	
+	/*****Animacion Prueba**********/
+	//Rosa
+	model = glm::translate(temporal, glm::vec3(37.0f, 0.0f, 10.0f));
+	model = glm::scale(model, glm::vec3(0.5f*movA, movA, 0.5f*movA));
+	model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
+	model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	shader.setMat4("model", model);
+	Rosa.Draw(shader);
+	
+
+
+
+
+
+
+
+
+
+
+	/***************/
+
 
 	model = glm::translate(temporal, glm::vec3(-40.8f, 0.5f, -4.5f));
 	//model = glm::rotate(model, glm::radians(270.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -1370,8 +1404,10 @@ int main()
 	Model carro2 = ((char *)"Models/CARRO2/carro2.obj");
 	Model robot = ((char *)"Models/mono/mono.obj");
 	Model BrazoDer = ((char *)"Models/mono/brazo.obj");
+	/*************************************************************************/
+	Model Rosa = ((char *)"Models/Rosa/Rose.obj");
+	/************************************************************************/
 	Model BrazoIzq = ((char *)"Models/mono/brazo.obj");
-
 	//Inicialización de KeyFrames
 
 	for (int i = 0; i < MAX_FRAMES; i++)
@@ -1418,7 +1454,7 @@ int main()
 		//display(modelShader, ourModel, llantasModel);
 		display(modelShader, text,  /*pisoModel*/
 			cieloModel, aveModel, alaDerModel, alaIzqModel, PieDer, PieIzq,
-			casa, comedor, alberca, sala, cocina, Salma, baño1, baño2, Javi, Mau, jardin, cochera, carro1, dron, carro2, robot, BrazoDer, BrazoIzq);// dron llantas
+			casa, comedor, alberca, sala, cocina, Salma, baño1, baño2, Javi, Mau, jardin, cochera, carro1, dron, carro2, robot, BrazoDer, BrazoIzq,Rosa);// dron llantas
 
 		std::cout << "Frame:" << (1 / deltaTime) << std::endl;
 
